@@ -45,3 +45,10 @@ ul {
     width: 35px;
 }
 
+.confirm-div {
+    width: 250px;
+    height: 200px;
+    background-color: #f0e7e1;
+    position: absolute;
+}
+

@@ -21,25 +21,25 @@ export const loadPage = () => {
     const loadProjects = () => loadProject(projectBar, projectArray, projectDivArray);
 
     const loadTodoItems = () => {
-        
-        loadTodoItem(todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv)
+        loadTodoItemOuter(todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv)
         addDeleteListener(currentProject);
     }
+
+    const projectListener = () => projectListenerOuter(projectIndex,todoListDivContainer,contentArea,projectArray,makeTodoDiv,currentProject,addDeleteListener)
     
     const addListeners = () => {
         projectDivArray.forEach((div) => {
-            
             div.addEventListener('click', () => {
-                projectIndex = projectDivArray.indexOf(div);
-                loadTodoItem(todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv);
-                currentProject = projectArray[projectIndex];
-                addDeleteListener(currentProject);
+                const divIndex = projectDivArray.indexOf(div);
+                currentProject = projectArray[divIndex];
             })
-        })
-
+            div.addEventListener('click', projectListener)
+            
+        });
+        
     }
 
-    const addDeleteListener = () => addDeleteListenerOuter(currentProject);
+    const addDeleteListener = () => addDeleteListenerOuter(contentArea, currentProject);
     
     const makeTodoDiv = (todo) => makeDiv(todo,todoListDivContainer);
     
@@ -48,11 +48,15 @@ export const loadPage = () => {
     return {loadProjects, loadTodoItems, addListeners}    
 }
 
+const projectListenerOuter = (projectIndex,todoListDivContainer,contentArea,projectArray,makeTodoDiv,currentProject,addDeleteListener) => {
+    projectIndex = projectArray.indexOf(currentProject);
+    loadTodoItemOuter(todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv);
+    currentProject = projectArray[projectIndex];
+    addDeleteListener(currentProject);
+};
 
 
-
-
-const loadTodoItem = (todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv) => {
+const loadTodoItemOuter = (todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv) => {
     todoListDivContainer.innerHTML = '';
 
     document.body.appendChild(contentArea);
@@ -63,36 +67,42 @@ const loadTodoItem = (todoListDivContainer,contentArea,projectIndex,projectArray
     projectTodoList.forEach((todo) => makeTodoDiv(todo))
 }
 
-export const addDeleteListenerOuter = (currentProject) => {
+export const addDeleteListenerOuter = (contentArea,currentProject) => {
     const deleteIconNodeList = document.querySelectorAll('.delete-icon');
     const deleteIconArray = Array.from(deleteIconNodeList);
 
     const todoDivNodeList = document.querySelectorAll('.todo-item');
+    const confirmDeletePopUp = () => {
+        const projectDivNodeList = document.querySelectorAll('.project-item');
+        projectDivNodeList.forEach((div) => {
+            div.removeEventListener
+        })
+        
+        const confirmDiv = document.createElement('div');
+        const confirmText = document.createElement('p');
+        const buttonDiv = document.createElement('div');
+        const confirmButton = document.createElement('button');
+        const cancelButton = document.createElement('button');
     
+        confirmDiv.classList.add('confirm-div');
+    
+        contentArea.appendChild(confirmDiv);
+        confirmDiv.appendChild(confirmText);
+        confirmDiv.appendChild(buttonDiv);
+        buttonDiv.appendChild(confirmButton);
+        buttonDiv.appendChild(cancelButton);
+        
+    
+        // currentProject.removeTodo(currentProject.todoArray[iconIndex]);
+        // todoDivNodeList[iconIndex].remove();
+        currentProject.todoArray.forEach(todo => console.log(todo));
+        deleteIconArray.forEach((icon) => icon.removeEventListener('click', confirmDeletePopUp))
+    }
 
     deleteIconArray.forEach((icon) => {
         const iconIndex = deleteIconArray.indexOf(icon);
-        icon.addEventListener('click', () => {
-            
-            currentProject.removeTodo(currentProject.todoArray[iconIndex]);
-            todoDivNodeList[iconIndex].remove();
-            currentProject.todoArray.forEach(todo => console.log(todo));
-        })
+        icon.addEventListener('click', confirmDeletePopUp);
     })
 }
 
 
-// const loadTodoItem = (todoListDivContainer,contentArea,projectDiv,projectArray,makeTodoDiv) => {
-//     todoListDivContainer.innerHTML = '';
-
-//     document.body.appendChild(contentArea);
-//     contentArea.appendChild(todoListDivContainer);
-
-//     const projectIndex = projectArray.indexOf(currentProject);
-
-//     const projectId = projectDiv.id;
-//     const projectIndex = projectId.substring(12);
-//     const projectTodoList = projectArray[projectIndex].todoArray;
-
-//     projectTodoList.forEach((todo) => makeTodoDiv(todo))
-// }

@@ -20,7 +20,7 @@ const generalProject = new Project('general');
 const otherProject = new Project('OtherProject');
 const sampleTodo = new Todo('Clean','sweep the floor',19990810,'high','general');
 const todo1 = new Todo('Cook','make spaghetti',19990810,'high','general');
-const todo2 = new Todo('Exercise','life weights at Crunch',19990810,'high','general');
+const todo2 = new Todo('Exercise','lift weights at Crunch',19990810,'high','general');
 const todo3 = new Todo('Spanish','practice spanish on youtube',19990810,'high','general');
 
 
@@ -44,6 +44,7 @@ const load = loadPage();
 load.loadProjects();
 load.loadTodoItems();
 load.addListeners();
+
 
 
 
