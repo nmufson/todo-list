@@ -1,96 +1,98 @@
 import { start } from "./index.js";
+import { makeDiv } from "./make-todo-div.js";
+import { loadProject } from "./load-projects.js";
+import { Project } from './project.js'
 
 
 export const loadPage = () => {
     const contentArea = document.createElement('div');
-    contentArea.id = 'content-area';
-
     const projectBar = document.createElement('div');
-    projectBar.id = 'project-bar';
-
     const todoListDivContainer = document.createElement('div');
+    contentArea.id = 'content-area';
+    projectBar.id = 'project-bar';
     todoListDivContainer.id = 'todo-list-container';
     
     const projectArray = start();
-
-    let projectDivArray;
+    let projectDivArray = [];
+    let currentProject = projectArray[0];
+    let projectIndex = projectArray.indexOf(currentProject);
     
-    const loadProjects = () => {
-        projectBar.innerHTML = '';
+    
+    const loadProjects = () => loadProject(projectBar, projectArray, projectDivArray);
+
+    const loadTodoItems = () => {
         
-        document.body.appendChild(projectBar);
-        
-        const projectList = document.createElement('ul');
-        projectBar.appendChild(projectList);
-    
-        projectArray.forEach((project) => {
-            const projectListItem = document.createElement('li');
-            const projectItemDiv = document.createElement('div');
-    
-            projectItemDiv.id = `project-div-${projectArray.indexOf(project)}`;
-            projectItemDiv.classList.add('project-item');
-            projectItemDiv.textContent = project.name;
-    
-            projectList.appendChild(projectListItem);
-            projectListItem.appendChild(projectItemDiv);
-        })
-
-        projectDivArray = projectBar.querySelectorAll('.project-item');
-    };
-    
-
-    
-    
-    
-    
-
-  
-    
-    
-   
-    
-    const loadTodoItems = (projectDiv = projectDivArray[0]) => {
-        todoListDivContainer.innerHTML = '';
-
-        document.body.appendChild(contentArea);
-        contentArea.appendChild(todoListDivContainer);
-
-        const projectId = projectDiv.id;
-        const projectIndex = projectId.substring(12);
-        const projectTodoList = projectArray[projectIndex].todoArray;
-
-        projectTodoList.forEach((todo) => makeTodoDiv(todo))
+        loadTodoItem(todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv)
+        addDeleteListener(currentProject);
     }
     
-    const addProjectDivListener = () => {
+    const addListeners = () => {
         projectDivArray.forEach((div) => {
-            div.addEventListener('click', () => loadTodoItems(div))
+            
+            div.addEventListener('click', () => {
+                projectIndex = projectDivArray.indexOf(div);
+                loadTodoItem(todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv);
+                currentProject = projectArray[projectIndex];
+                addDeleteListener(currentProject);
+            })
         })
+
     }
+
+    const addDeleteListener = () => addDeleteListenerOuter(currentProject);
     
-    const makeTodoDiv = (todo) => {
-        const todoDiv = document.createElement('div');
-        const todoTextDiv = document.createElement('div');
-        const iconDiv = document.createElement('div');
-        const todoHeader = document.createElement('h3');
-        const todoP = document.createElement('p');
-        todoDiv.classList.add('todo-item');
-        
-        
-        todoListDivContainer.appendChild(todoDiv);
-        todoDiv.appendChild(todoTextDiv);
-        todoDiv.appendChild(iconDiv);
-        todoTextDiv.appendChild(todoHeader);
-        todoTextDiv.appendChild(todoP);
-        
-        
-        todoHeader.textContent = todo.title;
-        todoP.textContent = todo.description;
-    }
+    const makeTodoDiv = (todo) => makeDiv(todo,todoListDivContainer);
     
     
-    return {loadProjects, loadTodoItems, addProjectDivListener, todoListDivContainer}    
+    
+    return {loadProjects, loadTodoItems, addListeners}    
 }
 
 
 
+
+
+const loadTodoItem = (todoListDivContainer,contentArea,projectIndex,projectArray,makeTodoDiv) => {
+    todoListDivContainer.innerHTML = '';
+
+    document.body.appendChild(contentArea);
+    contentArea.appendChild(todoListDivContainer);
+
+    const projectTodoList = projectArray[projectIndex].todoArray;
+
+    projectTodoList.forEach((todo) => makeTodoDiv(todo))
+}
+
+export const addDeleteListenerOuter = (currentProject) => {
+    const deleteIconNodeList = document.querySelectorAll('.delete-icon');
+    const deleteIconArray = Array.from(deleteIconNodeList);
+
+    const todoDivNodeList = document.querySelectorAll('.todo-item');
+    
+
+    deleteIconArray.forEach((icon) => {
+        const iconIndex = deleteIconArray.indexOf(icon);
+        icon.addEventListener('click', () => {
+            
+            currentProject.removeTodo(currentProject.todoArray[iconIndex]);
+            todoDivNodeList[iconIndex].remove();
+            currentProject.todoArray.forEach(todo => console.log(todo));
+        })
+    })
+}
+
+
+// const loadTodoItem = (todoListDivContainer,contentArea,projectDiv,projectArray,makeTodoDiv) => {
+//     todoListDivContainer.innerHTML = '';
+
+//     document.body.appendChild(contentArea);
+//     contentArea.appendChild(todoListDivContainer);
+
+//     const projectIndex = projectArray.indexOf(currentProject);
+
+//     const projectId = projectDiv.id;
+//     const projectIndex = projectId.substring(12);
+//     const projectTodoList = projectArray[projectIndex].todoArray;
+
+//     projectTodoList.forEach((todo) => makeTodoDiv(todo))
+// }
