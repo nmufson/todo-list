@@ -1,5 +1,3 @@
-
-
 export class Todo {
     constructor(title,description,dueDate,priority,project = currentProject) {
         this.title = title;

@@ -17,9 +17,20 @@ import { Project } from './project.js'
 import { loadPage } from './dom-manipulation.js';
 
 const generalProject = new Project('general');
-const otherProject = new Project('OtherProject')
-const sampleTodo = new Todo('Cook','make spaghetti',19990810,'high','general')
-generalProject.addTodo(sampleTodo);
+const otherProject = new Project('OtherProject');
+const sampleTodo = new Todo('Clean','sweep the floor',19990810,'high','general');
+const todo1 = new Todo('Cook','make spaghetti',19990810,'high','general');
+const todo2 = new Todo('Cook','make spaghetti',19990810,'high','general');
+const todo3 = new Todo('Cook','make spaghetti',19990810,'high','general');
+
+
+
+otherProject.addTodo(sampleTodo);
+generalProject.addTodo(todo1);
+generalProject.addTodo(todo2);
+generalProject.addTodo(todo3);
+
+
 const testDate = format(new Date(2014, 1, 11), "yyyy-MM-dd");
 
 export const start = () => {
@@ -28,10 +39,15 @@ export const start = () => {
     return projectArray;
 }
 
-loadPage();
+const load = loadPage();
+
+load.loadProjects();
+load.loadTodoItems();
+load.addProjectDivListener();
 
 
-generalProject.moveTodo(sampleTodo,otherProject);
+
+
 
 console.log(generalProject.todoArray);
 console.log(otherProject.todoArray);
