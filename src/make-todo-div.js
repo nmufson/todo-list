@@ -40,10 +40,52 @@ export const makeTodoDiv = () => {
         const todoListDivContainer = document.querySelector('#todo-list-container');
         todoListDivContainer.innerHTML = '';
     
+
         const currentProject = projectsObject.currentProject;
     
         const TodoList = currentProject.todoArray;
         TodoList.forEach((todo) => makeDiv(todo))
+    }
+
+    const loadAddNewTodoDiv = () => {
+        const todoListDivContainer = document.querySelector('#todo-list-container');
+        const addNewTodoDiv = document.createElement('div');
+        addNewTodoDiv.classList.add('add-new-todo-div');
+        
+        const nameInput = document.createElement('input');
+        const descriptionInput = document.createElement('input');
+        const dueDateInput = document.createElement('input');
+        const projectInput = document.createElement('input');
+        const projectDatalist = document.createElement('datalist');
+        const priorityInput = document.createElement('select');
+        const highPriorityOption = document.createElement('option');
+        const mediumPriorityOption = document.createElement('option');
+        const lowPriorityOption = document.createElement('option');
+
+        nameInput.setAttribute('type','text');
+        nameInput.setAttribute('placeholder','Task Name');
+        descriptionInput.setAttribute('type','text');
+        descriptionInput.setAttribute('placeholder','Description');
+        dueDateInput.setAttribute('type','date');
+        projectInput.setAttribute('type','text');
+        projectInput.setAttribute('list','projects');
+        projectDatalist.setAttribute('id','projects');
+
+        todoListDivContainer.appendChild(addNewTodoDiv);
+        addNewTodoDiv.appendChild(nameInput);
+        addNewTodoDiv.appendChild(descriptionInput);
+        addNewTodoDiv.appendChild(dueDateInput);
+        addNewTodoDiv.appendChild(priorityInput);
+        priorityInput.appendChild(highPriorityOption);
+        priorityInput.appendChild(mediumPriorityOption);
+        priorityInput.appendChild(lowPriorityOption);
+        addNewTodoDiv.appendChild(projectInput);
+        addNewTodoDiv.appendChild(projectDatalist);
+        //for each project create an option and append to ProjectDatalist 
+        //first need to create functionality for adding new projects 
+        // projectArray.forEach((project) => {
+
+        // })
     }
     
     const confirmDeletePopUp = (index,projectsObject,listenerObject) => {
@@ -132,5 +174,5 @@ export const makeTodoDiv = () => {
         confirmDiv.remove();
     }
 
-    return {makeDiv, loadTodoItemOuter, pushDeleteInstances, addDeleteIconListeners, removeDeleteIconListeners }
+    return {makeDiv, loadTodoItemOuter, loadAddNewTodoDiv, pushDeleteInstances, addDeleteIconListeners, removeDeleteIconListeners }
 }

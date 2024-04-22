@@ -1,7 +1,10 @@
-import { start } from "./index.js";
+
 import { makeTodoDiv } from "./make-todo-div.js";
 import { loadProjectsModule } from "./load-projects.js";
-import { Project } from './project.js'
+import { Project } from './project.js';
+import { Todo } from './create-todo.js';
+
+
 
 
 export const loadPage = () => {
@@ -16,28 +19,49 @@ export const loadPage = () => {
     document.body.appendChild(contentArea);
     contentArea.appendChild(todoListDivContainer);
     
+    const generalProject = new Project('general');
+    const otherProject = new Project('OtherProject');
+    
+    const projectArray = [generalProject, otherProject];
+    const projectsObject = { 
+        currentProject: projectArray[0]
+    }
 
-    const projectArray = start();
+    const sampleTodo = new Todo('Clean','sweep the floor',19990810,'high',projectsObject.currentProject);
+    const todo1 = new Todo('Cook','make spaghetti',19990810,'high','general');
+    const todo2 = new Todo('Exercise','lift weights at Crunch',19990810,'high','general');
+    const todo3 = new Todo('Spanish','practice spanish on youtube',19990810,'high','general');
+    const todo4 = new Todo('Da Livy un besito','Livy es muy bonita',19990810,'high','OtherProject');
+    
+    
+    
+    otherProject.addTodo(sampleTodo);
+    generalProject.addTodo(todo1);
+    generalProject.addTodo(todo2);
+    generalProject.addTodo(todo3);
+    otherProject.addTodo(todo4);
+    
 
     const listenerObject = {
         projectDivs: [],
         deleteIcons: [],
-        editIcons: []
+        editIcons: [],
+        addProject: []
     }
     
-    const projectsObject = { currentProject: projectArray[0] }
-
-
-    
     const loadProjects = () => {
-        loadProjectsModule().loadProject();
-        loadProjectsModule().pushChangeProjectInstances(projectsObject,listenerObject);
+        loadProjectsModule().loadProject(projectArray);
+        loadProjectsModule().pushChangeProjectInstances(projectArray,projectsObject,listenerObject);
         console.log(listenerObject.projectDivs);
         loadProjectsModule().addChangeProjectListeners(listenerObject);
+        loadProjectsModule().loadAddNewProjectListItem();
+        loadProjectsModule().addNewProjectEventListener(listenerObject);
+        
     }
 
     const loadTodoItems = () => {
         makeTodoDiv().loadTodoItemOuter(projectsObject);
+        makeTodoDiv().loadAddNewTodoDiv();
         makeTodoDiv().pushDeleteInstances(projectsObject,listenerObject);
         makeTodoDiv().addDeleteIconListeners(listenerObject);
     }
@@ -58,7 +82,7 @@ export const loadPage = () => {
     
     
     
-    return {loadProjects, loadTodoItems}    
+    return {loadProjects, loadTodoItems, projectsObject}    
 }
 
 

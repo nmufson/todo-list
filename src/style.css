@@ -13,8 +13,33 @@ body {
     grid-row: 1;
 }
 
-ul {
+#project-list {
     list-style-type: none;
+    font-size: 1.5em;
+}
+
+#add-project-li {
+    display: flex;
+    align-items: center;
+}
+
+#add-project-li > * {
+    display: flex;
+    margin: 0px;
+}
+
+#add-project-li > img {
+    height: 20px;
+    width: 20px;
+}
+
+#add-project-pop-up {
+    width: 250px;
+    height: 200px;
+    background-color: #f0e7e1;
+    position: absolute;
+    display: grid;
+    justify-content: center;
 }
 
 #content-area {
