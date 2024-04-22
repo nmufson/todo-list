@@ -1,6 +1,7 @@
 import { addDeleteListener } from "./dom-manipulation";
 
-export const makeDiv = (todo,todoListDivContainer) => {
+export const makeDiv = (todo) => {
+    const todoListDivContainer = document.querySelector('#todo-list-container');
     const todoDiv = document.createElement('div');
     const TextDiv = document.createElement('div');
     const Header = document.createElement('h3');

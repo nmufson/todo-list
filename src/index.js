@@ -43,7 +43,7 @@ const load = loadPage();
 
 load.loadProjects();
 load.loadTodoItems();
-load.addListeners();
+
 
 
 
