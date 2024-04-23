@@ -50,20 +50,19 @@ export const loadPage = () => {
     }
     
     const loadProjects = () => {
-        loadProjectsModule(listenerObject,projectArray).loadProject(projectArray);
-        loadProjectsModule(listenerObject,projectArray).pushChangeProjectInstances(projectArray,projectsObject,listenerObject);
+        loadProjectsModule(listenerObject,projectArray,projectsObject).loadProject(projectArray);
+        loadProjectsModule(listenerObject,projectArray,projectsObject).pushChangeProjectInstances(projectArray,projectsObject,listenerObject);
         console.log(listenerObject.projectDivs);
-        loadProjectsModule(listenerObject,projectArray).addChangeProjectListeners(listenerObject);
-        loadProjectsModule(listenerObject,projectArray).loadAddNewProjectListItem();
-        loadProjectsModule(listenerObject,projectArray).addNewProjectEventListener(listenerObject);
+        loadProjectsModule(listenerObject,projectArray,projectsObject).addChangeProjectListeners(listenerObject);
+        loadProjectsModule(listenerObject,projectArray,projectsObject).loadAddNewProjectListItem();
+        loadProjectsModule(listenerObject,projectArray,projectsObject).addNewProjectEventListener(listenerObject);
         
     }
 
     const loadTodoItems = () => {
-        makeTodoDiv().loadTodoItemOuter(projectsObject);
-        makeTodoDiv().loadAddNewTodoDiv();
-        makeTodoDiv().pushDeleteInstances(projectsObject,listenerObject);
-        makeTodoDiv().addDeleteIconListeners(listenerObject);
+        makeTodoDiv(projectArray,listenerObject,projectsObject).loadTodoItemOuter();
+        makeTodoDiv(projectArray,listenerObject,projectsObject).pushDeleteInstances(projectsObject,listenerObject);
+        makeTodoDiv(projectArray,listenerObject,projectsObject).addDeleteIconListeners(listenerObject);
     }
 
     console.log(projectArray);

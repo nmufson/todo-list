@@ -13,6 +13,10 @@ body {
     grid-row: 1;
 }
 
+#selected-project-div {
+    border: 1px solid red;
+}
+
 #project-list {
     list-style-type: none;
     font-size: 1.5em;
@@ -70,6 +74,16 @@ body {
 }
 
 .todo-item > div > img {
+    height: 35px;
+    width: 35px;
+}
+
+.add-new-todo-div-small {
+    display: flex;
+    align-items: center;
+    padding-left: 10%;
+}
+.add-new-todo-div-small > img {
     height: 35px;
     width: 35px;
 }
