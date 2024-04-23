@@ -110,7 +110,7 @@ export const makeTodoDiv = () => {
         cancelButton.textContent = 'Cancel';
 
         removeDeleteIconListeners(listenerObject);
-        loadProjectsModule().removeChangeProjectListeners(listenerObject);
+        loadProjectsModule(listenerObject).removeChangeProjectListeners(listenerObject);
 
         deleteButton.addEventListener('click', () => {
             confirmDelete(listenerObject,projectsObject,index);
@@ -164,9 +164,8 @@ export const makeTodoDiv = () => {
         confirmDiv.remove();
         todoDivNodeList[index].remove();
         
-        
-        
-        loadProjectsModule().addChangeProjectListeners(listenerObject);
+        loadProjectsModule(listenerObject).addChangeProjectListeners(listenerObject);
+        addDeleteIconListeners(listenerObject);
     }
     
     const cancelDelete = () => {

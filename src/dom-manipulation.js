@@ -50,12 +50,12 @@ export const loadPage = () => {
     }
     
     const loadProjects = () => {
-        loadProjectsModule().loadProject(projectArray);
-        loadProjectsModule().pushChangeProjectInstances(projectArray,projectsObject,listenerObject);
+        loadProjectsModule(listenerObject,projectArray).loadProject(projectArray);
+        loadProjectsModule(listenerObject,projectArray).pushChangeProjectInstances(projectArray,projectsObject,listenerObject);
         console.log(listenerObject.projectDivs);
-        loadProjectsModule().addChangeProjectListeners(listenerObject);
-        loadProjectsModule().loadAddNewProjectListItem();
-        loadProjectsModule().addNewProjectEventListener(listenerObject);
+        loadProjectsModule(listenerObject,projectArray).addChangeProjectListeners(listenerObject);
+        loadProjectsModule(listenerObject,projectArray).loadAddNewProjectListItem();
+        loadProjectsModule(listenerObject,projectArray).addNewProjectEventListener(listenerObject);
         
     }
 
@@ -66,14 +66,13 @@ export const loadPage = () => {
         makeTodoDiv().addDeleteIconListeners(listenerObject);
     }
 
-
+    console.log(projectArray);
 
     
     
     document.addEventListener('click', () => {
         console.log(projectsObject.currentProject.name);
-        console.log(listenerObject.projectDivs);
-        console.log(listenerObject.deleteIcons);
+        console.log(projectArray)
     });
 
     
@@ -82,7 +81,7 @@ export const loadPage = () => {
     
     
     
-    return {loadProjects, loadTodoItems, projectsObject}    
+    return {loadProjects, loadTodoItems, projectsObject, projectArray}    
 }
 
 
