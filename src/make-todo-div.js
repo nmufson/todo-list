@@ -39,7 +39,9 @@ export const makeTodoDiv = (projectArray,listenerObject) => {
         namePara.textContent = todo.name;
         descriptionPara.textContent = todo.description;
         //will come back to this after finishing add task functionality 
-        dueDateDiv.textContent = todo.dueDate;
+        const date = todo.dueDate;
+        const newDate = new Date(date.slice(0,4),date.slice(5,7)-1,date.slice(8,10));
+        dueDateDiv.textContent = format(newDate, 'MMM dd');
         checkBoxIcon.setAttribute('src', '../src/icons/square.svg')
         editIcon.setAttribute('src', '../src/icons/pencil.svg');
         deleteIcon.setAttribute('src','../src/icons/delete.svg')
@@ -141,9 +143,12 @@ export const makeTodoDiv = (projectArray,listenerObject) => {
             
             const name = nameInput.value;
             const description = descriptionInput.value;
-            const dueDate = format(parseISO(dueDateInput.value), 'mm-dd-yyyy');
+            const date = dueDateInput.value;
+        
+            
+            
             const priority = priorityInput.value;
-            const newTodo = new Todo(name,description,dueDate,priority,currentProject.name);
+            const newTodo = new Todo(name,description,date,priority,currentProject.name);
             currentProject.addTodo(newTodo);
 
 
@@ -153,6 +158,7 @@ export const makeTodoDiv = (projectArray,listenerObject) => {
         })
     }
 
+    
 
 
     //make this require arguments (input values), will ensure all fields

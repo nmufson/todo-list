@@ -37,6 +37,35 @@ load.loadProjects();
 load.loadTodoItems();
 
 
+const checkBoxNodeList = document.querySelectorAll('.check-box-icon');
+const checkBoxArray = Array.from(checkBoxNodeList);
+
+
+
+const func = (event) => {
+    const clickedElement = event.target;
+    const index = checkBoxArray.indexOf(clickedElement);
+    console.log(index);
+}
+
+checkBoxArray.forEach((box) => {
+    box.addEventListener('click',func)
+})
+
+const editIconNodeList = document.querySelectorAll('.edit-icon');
+const editIconArray = Array.from(editIconNodeList);
+
+editIconArray[0].addEventListener('click', () => {
+    checkBoxArray.forEach((box) => {
+        box.removeEventListener('click',func)
+    })
+})
+
+const projectUL = document.querySelector('#project-list');
+projectUL.addEventListener('click', () => console.log(event.target));
+
+
+
 
 
 

@@ -27,11 +27,11 @@ export const loadPage = () => {
         currentProject: projectArray[0]
     }
 
-    const sampleTodo = new Todo('Clean','sweep the floor',19990810,'high',projectsObject.currentProject);
-    const todo1 = new Todo('Cook','make spaghetti',19990810,'high','general');
-    const todo2 = new Todo('Exercise','lift weights at Crunch',19990810,'high','general');
-    const todo3 = new Todo('Spanish','practice spanish on youtube',19990810,'high','general');
-    const todo4 = new Todo('Da Livy un besito','Livy es muy bonita',19990810,'high','OtherProject');
+    const sampleTodo = new Todo('Clean','sweep the floor','2024-04-28','high',projectsObject.currentProject);
+    const todo1 = new Todo('Cook','make spaghetti','2024-04-28','high','general');
+    const todo2 = new Todo('Exercise','lift weights at Crunch','2024-04-28','high','general');
+    const todo3 = new Todo('Spanish','practice spanish on youtube','2024-04-28','high','general');
+    const todo4 = new Todo('Da Livy un besito','Livy es muy bonita','2024-04-28','high','OtherProject');
     
     
     
