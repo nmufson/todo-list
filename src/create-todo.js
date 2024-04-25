@@ -5,10 +5,25 @@ export class Todo {
         this.dueDate = dueDate;
         this.priority = priority;
         this.project = project;
+        this.complete = 'no';
     }
 
-    editTodo = (property,newValue) => {
-        this[property] = newValue;
+    editTodo = (object) => {
+        const entries = Object.entries(object);
+        entries.forEach((entry) => {
+            const key = entry[0];
+            const value = entry[1];
+            this[key] = value;
+    })
+    }
+
+    changeCompleteStatus = () => {
+        if (this.complete === 'no') {
+            this.complete = 'yes';
+        } else {
+            this.complete = 'no';
+        }
+        
     }
 }
 

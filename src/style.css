@@ -67,19 +67,48 @@ body {
     border-bottom: black solid 1px;
 }
 
-.todo-item > img {
-    margin-left: 2%;
-    height: 50px;
-    width: 55px;
-    align-self: center;
+.check-box-div {
+    position: relative;
 }
 
-.todo-item > div > :first-child {
+.check-box-icon {
+    margin-left: 2%;
+    align-self: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 75%;
+    height: 75%;
+}
+
+.xMark-icon {
+    margin-left: 2%;
+    align-self: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 77%;
+}
+
+.top-div {
     display: grid;
     grid-template-columns: 2fr 1fr;
 }
 
-.todo-item > div:nth-of-type(2) {
+.bottom-div-edit {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.bottom-right-div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+
+.icon-div {
     display: grid;
     grid-template-columns: 1fr 1fr;
     margin-top: 10%;
@@ -87,7 +116,7 @@ body {
 }
 
 
-.todo-item > div > img {
+.icon-div > img {
     
     height: 35px;
     width: 35px;

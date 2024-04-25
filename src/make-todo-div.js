@@ -9,64 +9,90 @@ export const makeTodoDiv = (projectArray,projectsObject) => {
     const makeDiv = (todo) => {
         const todoListDivContainer = document.querySelector('#todo-list-container');
         const todoDiv = document.createElement('div');
-        const textDiv = document.createElement('div');
         const middleDiv = document.createElement('div');
         const topDiv = document.createElement('div');
-        
-        const namePara = document.createElement('h3');
-        const descriptionPara = document.createElement('p');
-        const infoDiv = document.createElement('div');
+        const topLeftDiv = document.createElement('div');
+        const bottomDiv = document.createElement('div');
+        const bottomLeftDiv = document.createElement('div');
+        const checkBoxDiv = document.createElement('div');
+        const topRightDiv = document.createElement('div');
         const iconDiv = document.createElement('div');
+        const dueDateDiv = document.createElement('div');
+        const priorityDiv = document.createElement('div');
+        
+        const nameH3 = document.createElement('h3');
+        const descriptionPara = document.createElement('p');
+        const dueDatePara = document.createElement('p');
+        const priorityPara = document.createElement('p');
 
-        const dueDate = document.createElement('div');
-        const priority = document.createElement('div');
+       
         
         const checkBoxIcon = document.createElement('img');
         const editIcon = document.createElement('img');
         const deleteIcon = document.createElement('img');
+        const xMarkIcon = document.createElement('img');
     
         todoDiv.classList.add('todo-item');
-        topDiv
+        checkBoxDiv.classList.add('check-box-div');
+        middleDiv.classList.add('middle-div');
+        topDiv.classList.add('top-div');
+        topLeftDiv.classList.add('top-left-div');
+        topRightDiv.classList.add('top-right-div');
+        bottomDiv.classList.add('bottom-div');
+        bottomLeftDiv.classList.add('bottom-left-div');
+        dueDateDiv.classList.add('due-date-div');
+        priorityDiv.classList.add('priority-div');
+        iconDiv.classList.add('icon-div');
         checkBoxIcon.classList.add('check-box-icon');
+        nameH3.classList.add('name-h3');
+        descriptionPara.classList.add('description-para');
+        dueDatePara.classList.add('due-date-para');
+        priorityPara.classList.add('priority-para');
         editIcon.classList.add('edit-icon');
         deleteIcon.classList.add('delete-icon');
+        
     
         todoListDivContainer.appendChild(todoDiv);
-        todoDiv.appendChild(checkBoxIcon);
+        todoDiv.appendChild(checkBoxDiv);
         todoDiv.appendChild(middleDiv);
         todoDiv.appendChild(iconDiv);
 
-        middleDiv.appendChild(topDiv);
-        middleDiv.appendChild(descriptionPara);
+        checkBoxDiv.appendChild(checkBoxIcon);
 
-        topDiv.appendChild(namePara);
-        topDiv.appendChild(infoDiv);
+        middleDiv.appendChild(topDiv);
+        middleDiv.appendChild(bottomDiv);
+
+        topDiv.appendChild(topLeftDiv);
+        topDiv.appendChild(topRightDiv);
+
+        topLeftDiv.appendChild(nameH3);
+
+        bottomDiv.appendChild(bottomLeftDiv);
+        bottomLeftDiv.appendChild(descriptionPara);
         
-        infoDiv.appendChild(dueDate);
-        infoDiv.appendChild(priority);
+        topRightDiv.appendChild(dueDateDiv);
+        topRightDiv.appendChild(priorityDiv);
+
+        dueDateDiv.appendChild(dueDatePara);
+        priorityDiv.appendChild(priorityPara);
 
         iconDiv.appendChild(editIcon);
         iconDiv.appendChild(deleteIcon);
 
-        
-
-        
-        
-
-
-        
-        namePara.textContent = todo.name;
+        nameH3.textContent = todo.name;
         descriptionPara.textContent = todo.description;
-        priority.textContent = `${todo.priority} priority`;
+        priorityPara.textContent = `${todo.priority} priority`;
         //will come back to this after finishing add task functionality 
         const date = todo.dueDate;
         const newDate = new Date(date.slice(0,4),date.slice(5,7)-1,date.slice(8,10));
-        dueDate.textContent = format(newDate, 'MMM dd');
+        dueDatePara.textContent = format(newDate, 'MMM dd');
 
 
-        checkBoxIcon.setAttribute('src', '../src/icons/square.svg')
+
+
+        checkBoxIcon.setAttribute('src', '../src/icons/square.svg');
         editIcon.setAttribute('src', '../src/icons/pencil.svg');
-        deleteIcon.setAttribute('src','../src/icons/delete.svg')
+        deleteIcon.setAttribute('src','../src/icons/delete.svg');
     }
     
     const loadTodoItemOuter = () => {
@@ -83,7 +109,90 @@ export const makeTodoDiv = (projectArray,projectsObject) => {
         TodoList.forEach((todo) => makeDiv(todo))
         loadAddNewTodoDiv();
         addDeleteIconListeners();
+        addCheckBoxListeners();
+        addEditIconListeners();
+        loadXMarks();
+
+
     }
+
+    const addEditIconListeners = () => {
+        const editIconNodeList = document.querySelectorAll('.edit-icon');
+        editIconNodeList.forEach((editIcon) => {
+            editIcon.addEventListener('click', () => clickEditIcon(editIcon,editIconNodeList))
+        })
+    }
+    
+    const clickEditIcon = (editIcon,editIconNodeList) => {
+        loadTodoItemOuter();
+        const editIconArray = Array.from(editIconNodeList);
+        const index = editIconArray.indexOf(editIcon);
+        const currentProject = projectsObject.currentProject;
+        const currentTodo = currentProject.todoArray[index];
+        
+        const nameH3 = document.querySelectorAll('.name-h3')[index];
+        const descriptionPara = document.querySelectorAll('.description-para')[index];
+        const dueDatePara = document.querySelectorAll('.due-date-para')[index];
+        const priorityPara = document.querySelectorAll('.priority-para')[index];
+        const bottomDiv = document.querySelectorAll('.bottom-div')[index];
+
+        const bottomRightDiv = document.createElement('div');
+        const saveButton = document.createElement('button');
+        const cancelButton = document.createElement('button');
+
+        bottomDiv.removeAttribute('class');
+        bottomDiv.classList.add('bottom-div-edit');
+        bottomRightDiv.classList.add('bottom-right-div');
+
+        bottomDiv.appendChild(bottomRightDiv);
+        bottomRightDiv.appendChild(saveButton);
+        bottomRightDiv.appendChild(cancelButton);
+
+        const parentNameH3 = nameH3.parentNode;
+        const parentDescriptionPara = descriptionPara.parentNode;
+        const parentdueDatePara = dueDatePara.parentNode;
+        const parentpriorityPara = priorityPara.parentNode;
+
+        const nameInput = document.createElement('input');
+        const descriptionInput = document.createElement('input');
+        const dueDateInput = document.createElement('input');
+        const priorityInput = document.createElement('select');
+        
+        generatePriorityInput(priorityInput);
+
+        nameInput.setAttribute('type','text');
+        descriptionInput.setAttribute('type','text');
+        dueDateInput.setAttribute('type','date');
+
+        nameInput.value = currentTodo.name;
+        descriptionInput.value = currentTodo.description;
+        dueDateInput.value = currentTodo.dueDate;
+        priorityInput.value = currentTodo.priority;
+
+        saveButton.textContent = 'Save';
+        cancelButton.textContent = 'Cancel';
+
+        parentNameH3.replaceChild(nameInput, nameH3);
+        parentDescriptionPara.replaceChild(descriptionInput, descriptionPara);
+        parentdueDatePara.replaceChild(dueDateInput, dueDatePara);
+        parentpriorityPara.replaceChild(priorityInput,priorityPara);
+
+        saveButton.addEventListener('click', () => saveEditTodo(currentTodo,nameInput,descriptionInput,dueDateInput,priorityInput))
+        cancelButton.addEventListener('click', loadTodoItemOuter)
+    }
+
+    const saveEditTodo = (currentTodo,nameInput,descriptionInput,dueDateInput,priorityInput) => {
+        const object = {
+            name: nameInput.value,
+            description: descriptionInput.value,
+            dueDate: dueDateInput.value,
+            priority: priorityInput.value,
+        }
+        currentTodo.editTodo(object);
+        loadTodoItemOuter();
+    }
+
+    
 
     const loadAddNewTodoDiv = () => {
         
@@ -107,8 +216,24 @@ export const makeTodoDiv = (projectArray,projectsObject) => {
         })
     }
 
+    const generatePriorityInput = (priorityInput) => {
+        const blankPriorityOption = document.createElement('option');
+        const highPriorityOption = document.createElement('option');
+        const mediumPriorityOption = document.createElement('option');
+        const lowPriorityOption = document.createElement('option');
+
+        priorityInput.appendChild(blankPriorityOption);
+        priorityInput.appendChild(highPriorityOption);
+        priorityInput.appendChild(mediumPriorityOption);
+        priorityInput.appendChild(lowPriorityOption);
+
+        lowPriorityOption.textContent = 'Low';
+        mediumPriorityOption.textContent = 'Medium';
+        highPriorityOption.textContent = 'High';
+    }
+
     const loadNewTodoInputSmall = (projectArray) => {
-        
+        loadTodoItemOuter();
         const todoListDivContainer = document.querySelector('#todo-list-container');
         const addNewTodoDiv = document.createElement('div');
         addNewTodoDiv.classList.add('add-new-todo-input');
@@ -118,13 +243,11 @@ export const makeTodoDiv = (projectArray,projectsObject) => {
         const descriptionInput = document.createElement('input');
         const dueDateInput = document.createElement('input');
         const priorityInput = document.createElement('select');
-        const blankPriorityOption = document.createElement('option');
-        const highPriorityOption = document.createElement('option');
-        const mediumPriorityOption = document.createElement('option');
-        const lowPriorityOption = document.createElement('option');
         const buttonDiv = document.createElement('div');
         const addButton = document.createElement('button');
         const cancelButton = document.createElement('button');
+
+        generatePriorityInput(priorityInput);
 
         nameInput.setAttribute('type','text');
         nameInput.setAttribute('placeholder','Task Name');
@@ -138,49 +261,89 @@ export const makeTodoDiv = (projectArray,projectsObject) => {
         addNewTodoDiv.appendChild(dueDateInput);
         addNewTodoDiv.appendChild(priorityInput);
         addNewTodoDiv.appendChild(buttonDiv);
-        priorityInput.appendChild(blankPriorityOption);
-        priorityInput.appendChild(highPriorityOption);
-        priorityInput.appendChild(mediumPriorityOption);
-        priorityInput.appendChild(lowPriorityOption);
         buttonDiv.appendChild(addButton);
         buttonDiv.appendChild(cancelButton);
         
         addButton.textContent = 'Add';
         cancelButton.textContent = 'Cancel';
 
-        lowPriorityOption.textContent = 'Low';
-        mediumPriorityOption.textContent = 'Medium';
-        highPriorityOption.textContent = 'High';
-
-        addButton.addEventListener('click', () => {
-            const projectDivNodeList = document.querySelectorAll('.project-item');
-            const projectDivArray = Array.from(projectDivNodeList);
-            const currentProjectDiv = document.querySelector('#selected-project-div');
-            const index = projectDivArray.indexOf(currentProjectDiv);
-            const currentProject = projectArray[index];
-            
-            const name = nameInput.value;
-            const description = descriptionInput.value;
-            const date = dueDateInput.value;
         
-            
-            
-            const priority = priorityInput.value;
-            const newTodo = new Todo(name,description,date,priority,currentProject.name);
-            currentProject.addTodo(newTodo);
 
-
-            loadTodoItemOuter();
+        addButton.addEventListener('click', () => confirmNewTodoInput(descriptionInput,nameInput,dueDateInput,priorityInput));
+        cancelButton.addEventListener('click', () => {
+            addNewTodoDiv.remove();
+            loadAddNewTodoDiv();
         })
     }
 
+
+    const confirmNewTodoInput = (descriptionInput,nameInput,dueDateInput,priorityInput) => {
+        const projectDivNodeList = document.querySelectorAll('.project-item');
+        const projectDivArray = Array.from(projectDivNodeList);
+        const currentProjectDiv = document.querySelector('#selected-project-div');
+        const index = projectDivArray.indexOf(currentProjectDiv);
+        const currentProject = projectArray[index];
+        
+        const name = nameInput.value;
+        const description = descriptionInput.value;
+        const date = dueDateInput.value;
     
+        const priority = priorityInput.value;
+        const newTodo = new Todo(name,description,date,priority,currentProject.name);
+        currentProject.addTodo(newTodo);
+
+        loadTodoItemOuter();
+    }
 
 
-    //insert this as the event listener function 
-    // const AddNewTodo = () => {
+    const addCheckBoxListeners = () => {
+        const checkBoxIconNodeList = document.querySelectorAll('.check-box-icon');
+        checkBoxIconNodeList.forEach((checkBoxIcon) => {
+            checkBoxIcon.addEventListener('click', () => alterCheckBox(checkBoxIcon,checkBoxIconNodeList));
+        })
+    }
 
-    // }
+    const loadXMarks = () => {
+        const checkBoxDivNodeList = document.querySelectorAll('.check-box-div');
+        const checkBoxDivArray = Array.from(checkBoxDivNodeList);
+        const checkBoxIconNodeList = document.querySelectorAll('.check-box-icon')
+        const xMarkNodeList = document.querySelectorAll('.xMark-icon');
+        const xMarkArray = Array.from(xMarkNodeList);
+        xMarkArray.forEach((xMark) => xMark.remove());
+        checkBoxDivArray.forEach((div) => {
+            const index = checkBoxDivArray.indexOf(div);
+            const currentProject = projectsObject.currentProject;
+            const currentTodo = currentProject.todoArray[index];
+            const status = currentTodo.complete;
+            console.log(status)
+            if (status === 'yes') {
+                const xMarkIcon = document.createElement('img');
+                xMarkIcon.classList.add('xMark-icon');
+                xMarkIcon.setAttribute('src', '../src/icons/x-mark.svg')
+                div.appendChild(xMarkIcon);
+            }
+            const xMark = div.querySelector('.xMark-icon');
+            const checkBoxIcon = div.querySelector('.check-box-icon');
+            if (xMark) {
+                
+                xMark.addEventListener('click',() => alterCheckBox(checkBoxIcon,checkBoxIconNodeList))
+            }
+        })
+    }
+
+    const alterCheckBox = (checkBoxIcon,checkBoxIconNodeList) => {
+        if (!listenerFlags.checkBoxShouldRun) return;
+        const checkBoxIconArray = Array.from(checkBoxIconNodeList);
+        const index = checkBoxIconArray.indexOf(checkBoxIcon);
+        const currentProject = projectsObject.currentProject;
+        const currentTodo = currentProject.todoArray[index];
+        if (currentTodo.complete === 'no') {
+            currentTodo.complete = 'yes';
+        } else {
+            currentTodo.complete = 'no'
+        };
+        loadXMarks();
+    }
 
     const addDeleteIconListeners = () => {
         const deleteIconNodeList = document.querySelectorAll('.delete-icon');

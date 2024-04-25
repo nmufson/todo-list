@@ -8,7 +8,9 @@ export let listenerFlags = {
     changeProjectShouldRun: true,
     deleteIconShouldRun: true,
     addNewProjectShouldRun: true,
-    newTodoInputShouldRun: true
+    newTodoInputShouldRun: true,
+    checkBoxShouldRun: true,
+    editTodoIconShouldRun: true,
 }
 
 export const loadProjectsModule = (projectArray,projectsObject) => {
