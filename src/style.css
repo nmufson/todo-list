@@ -56,26 +56,42 @@ body {
 
 #todo-list-container {
     
-    width: 430px;
+    width: 450px;
     border: 2px solid black;
     background-color: lightsalmon;
 }
 
 .todo-item {
-    margin-left: 2%;
     display: grid;
     grid-template-columns: 1fr 4fr 1fr;
+    border-bottom: black solid 1px;
 }
 
 .todo-item > img {
-    height: 35px;
-    width: 35px;
+    margin-left: 2%;
+    height: 50px;
+    width: 55px;
     align-self: center;
 }
 
+.todo-item > div > :first-child {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.todo-item > div:nth-of-type(2) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 10%;
+    margin-right: 30%;
+}
+
+
 .todo-item > div > img {
+    
     height: 35px;
     width: 35px;
+    
 }
 
 .add-new-todo-div-small {

@@ -1,47 +1,69 @@
 import { Todo } from "./create-todo";
 import { addDeleteListener } from "./dom-manipulation";
-import { loadProjectsModule } from "./load-projects";
+import { loadProjectsModule, listenerFlags } from "./load-projects";
 import { parseISO, format } from 'date-fns';
-const testDate = format(new Date(2014, 11, 11), "MM-dd-yyyy");
-console.log(testDate);
 
-export const makeTodoDiv = (projectArray,listenerObject) => {
+export const makeTodoDiv = (projectArray,projectsObject) => {
     
     //make div a different color based on PRIORITY
     const makeDiv = (todo) => {
         const todoListDivContainer = document.querySelector('#todo-list-container');
         const todoDiv = document.createElement('div');
         const textDiv = document.createElement('div');
+        const middleDiv = document.createElement('div');
+        const topDiv = document.createElement('div');
+        
         const namePara = document.createElement('h3');
         const descriptionPara = document.createElement('p');
-        const dueDateDiv = document.createElement('div');
+        const infoDiv = document.createElement('div');
         const iconDiv = document.createElement('div');
+
+        const dueDate = document.createElement('div');
+        const priority = document.createElement('div');
         
         const checkBoxIcon = document.createElement('img');
         const editIcon = document.createElement('img');
         const deleteIcon = document.createElement('img');
     
         todoDiv.classList.add('todo-item');
+        topDiv
         checkBoxIcon.classList.add('check-box-icon');
         editIcon.classList.add('edit-icon');
         deleteIcon.classList.add('delete-icon');
     
         todoListDivContainer.appendChild(todoDiv);
         todoDiv.appendChild(checkBoxIcon);
-        todoDiv.appendChild(textDiv);
-        todoDiv.appendChild(dueDateDiv);
+        todoDiv.appendChild(middleDiv);
         todoDiv.appendChild(iconDiv);
-        textDiv.appendChild(namePara);
-        textDiv.appendChild(descriptionPara);
+
+        middleDiv.appendChild(topDiv);
+        middleDiv.appendChild(descriptionPara);
+
+        topDiv.appendChild(namePara);
+        topDiv.appendChild(infoDiv);
+        
+        infoDiv.appendChild(dueDate);
+        infoDiv.appendChild(priority);
+
         iconDiv.appendChild(editIcon);
         iconDiv.appendChild(deleteIcon);
+
+        
+
+        
+        
+
+
         
         namePara.textContent = todo.name;
         descriptionPara.textContent = todo.description;
+        priority.textContent = `${todo.priority} priority`;
         //will come back to this after finishing add task functionality 
         const date = todo.dueDate;
         const newDate = new Date(date.slice(0,4),date.slice(5,7)-1,date.slice(8,10));
-        dueDateDiv.textContent = format(newDate, 'MMM dd');
+        dueDate.textContent = format(newDate, 'MMM dd');
+
+
         checkBoxIcon.setAttribute('src', '../src/icons/square.svg')
         editIcon.setAttribute('src', '../src/icons/pencil.svg');
         deleteIcon.setAttribute('src','../src/icons/delete.svg')
@@ -60,9 +82,11 @@ export const makeTodoDiv = (projectArray,listenerObject) => {
         const TodoList = currentProject.todoArray;
         TodoList.forEach((todo) => makeDiv(todo))
         loadAddNewTodoDiv();
+        addDeleteIconListeners();
     }
 
     const loadAddNewTodoDiv = () => {
+        
         const todoListDivContainer = document.querySelector('#todo-list-container');
         const addNewTodoDiv = document.createElement('div');
         addNewTodoDiv.classList.add('add-new-todo-div-small');
@@ -77,12 +101,14 @@ export const makeTodoDiv = (projectArray,listenerObject) => {
         addNewTodoDiv.appendChild(para);
 
         addNewTodoDiv.addEventListener('click', () => {
+            if (!listenerFlags.deleteIconShouldRun) return;
             addNewTodoDiv.remove();
             loadNewTodoInputSmall(projectArray);
         })
     }
 
-    const loadNewTodoInputSmall = (projectArray,projectsObject) => {
+    const loadNewTodoInputSmall = (projectArray) => {
+        
         const todoListDivContainer = document.querySelector('#todo-list-container');
         const addNewTodoDiv = document.createElement('div');
         addNewTodoDiv.classList.add('add-new-todo-input');
@@ -133,14 +159,6 @@ export const makeTodoDiv = (projectArray,listenerObject) => {
             const index = projectDivArray.indexOf(currentProjectDiv);
             const currentProject = projectArray[index];
             
-            console.log(projectDivNodeList);
-            console.log(projectDivArray);
-            console.log(currentProjectDiv);
-            console.log(index);
-            console.log(projectArray);
-            console.log(currentProject.name);
-            console.log(listenerObject);
-            
             const name = nameInput.value;
             const description = descriptionInput.value;
             const date = dueDateInput.value;
@@ -152,116 +170,78 @@ export const makeTodoDiv = (projectArray,listenerObject) => {
             currentProject.addTodo(newTodo);
 
 
-            loadTodoItemOuter(currentProject);
-            pushDeleteInstances(projectsObject,listenerObject);
-            addDeleteIconListeners(listenerObject);
+            loadTodoItemOuter();
         })
     }
 
     
 
 
-    //make this require arguments (input values), will ensure all fields
-    //are entered
-    const AddNewTodo = () => {
-        //ensure all fields are entered
-        //use fields as arguments for a new Todo instance
-        //push the new Todo into current project's todoArray
-        //reload todo items in current project
+    //insert this as the event listener function 
+    // const AddNewTodo = () => {
 
+    // }
 
-    }
-    
-    
-
-    const pushDeleteInstances = (projectsObject,listenerObject) => {
+    const addDeleteIconListeners = () => {
         const deleteIconNodeList = document.querySelectorAll('.delete-icon');
-        const deleteIconArray = Array.from(deleteIconNodeList);
-        
-        listenerObject.deleteIcons.splice(0)
-        deleteIconArray.forEach((icon) => {
-            const index = deleteIconArray.indexOf(icon);
-            //creates function definition of deleteIconOuter with icon's index passed as an argument
-            //pushes each function definition into our array
-            const deleteIcon = () => confirmDeletePopUp(index,projectsObject,listenerObject);
-            listenerObject.deleteIcons.push(deleteIcon);
-        })
-    }
-
-    const addDeleteIconListeners = (listenerObject) => {
-        const deleteIconNodeList = document.querySelectorAll('.delete-icon');
-        const deleteIconArray = Array.from(deleteIconNodeList);
-    
-        deleteIconArray.forEach((icon) => {
-            const index = deleteIconArray.indexOf(icon);
-            const confirmDeletePopUp = listenerObject.deleteIcons[index];
+        deleteIconNodeList.forEach((icon) => {
             icon.addEventListener('click', confirmDeletePopUp)
         })
     }
-    
-    const removeDeleteIconListeners = (listenerObject) => {
-        const deleteIconNodeList = document.querySelectorAll('.delete-icon');
-        const deleteIconArray = Array.from(deleteIconNodeList);
-    
-        deleteIconArray.forEach((icon) => {
-            const index = deleteIconArray.indexOf(icon);
-            const confirmDeletePopUp = listenerObject.deleteIcons[index];
-            icon.removeEventListener('click', confirmDeletePopUp)
-        })
-    }
 
-    const confirmDelete = (listenerObject,projectsObject,index) => {
+
+    const confirmDelete = (index) => {
         const todoDivNodeList = document.querySelectorAll('.todo-item');
+        const todoDivArray = Array.from(todoDivNodeList);
         const confirmDiv = document.querySelector('.confirm-div');
         const currentProject = projectsObject.currentProject;
         currentProject.removeTodo(currentProject.todoArray[index]);
-    
+
         confirmDiv.remove();
-        todoDivNodeList[index].remove();
-        
-        loadProjectsModule(listenerObject).addChangeProjectListeners(listenerObject);
-        addDeleteIconListeners(listenerObject);
+        todoDivArray[index].remove();
+
+        loadProjectsModule().turnFlagsTrue();
     }
     
-    const cancelDelete = (listenerObject) => {
+    const cancelDelete = () => {
         const confirmDiv = document.querySelector('.confirm-div');
         confirmDiv.remove();
+        loadProjectsModule().turnFlagsTrue();
 
-        loadProjectsModule(listenerObject).addChangeProjectListeners(listenerObject);
-        addDeleteIconListeners(listenerObject);
     }
 
-    const confirmDeletePopUp = (index,projectsObject,listenerObject) => {
-        const contentArea = document.querySelector('#content-area');
+    const confirmDeletePopUp = (event) => {
+        if (!listenerFlags.deleteIconShouldRun) return;
+        loadProjectsModule().turnFlagsFalse();
+
+        const nodeList = document.querySelectorAll('.delete-icon');
+        const nodeArray = Array.from(nodeList);
+        const element = event.target;
+        const index  = nodeArray.indexOf(element);
         
+        const contentArea = document.querySelector('#content-area');
         const confirmDiv = document.createElement('div');
         const confirmPara = document.createElement('p');
         const buttonDiv = document.createElement('div');
         const deleteButton = document.createElement('button');
         const cancelButton = document.createElement('button');
-    
-        confirmDiv.classList.add('confirm-div');
-    
+
         contentArea.appendChild(confirmDiv);
         confirmDiv.appendChild(confirmPara);
         confirmDiv.appendChild(buttonDiv);
         buttonDiv.appendChild(deleteButton);
         buttonDiv.appendChild(cancelButton);
     
+        confirmDiv.classList.add('confirm-div');
+    
         confirmPara.textContent = 'Delete To-do?';
         deleteButton.textContent = 'Delete';
         cancelButton.textContent = 'Cancel';
 
-        removeDeleteIconListeners(listenerObject);
-        loadProjectsModule(listenerObject).removeChangeProjectListeners(listenerObject);
-
-        deleteButton.addEventListener('click', () => {
-            confirmDelete(listenerObject,projectsObject,index);
-            listenerObject.deleteIcons.splice(index,1)
-        })
-        cancelButton.addEventListener('click', () => cancelDelete(listenerObject));
+        deleteButton.addEventListener('click', () => confirmDelete(index))
+        cancelButton.addEventListener('click', cancelDelete);
 
     }
 
-    return {makeDiv, loadTodoItemOuter, loadAddNewTodoDiv, pushDeleteInstances, addDeleteIconListeners, removeDeleteIconListeners }
+    return {makeDiv, loadTodoItemOuter, loadAddNewTodoDiv, addDeleteIconListeners }
 }

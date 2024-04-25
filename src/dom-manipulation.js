@@ -41,45 +41,18 @@ export const loadPage = () => {
     generalProject.addTodo(todo3);
     otherProject.addTodo(todo4);
     
-
-    const listenerObject = {
-        projectDivs: [],
-        deleteIcons: [],
-        editIcons: [],
-        addProject: []
-    }
     
     const loadProjects = () => {
-        loadProjectsModule(listenerObject,projectArray,projectsObject).loadProject(projectArray);
-        loadProjectsModule(listenerObject,projectArray,projectsObject).pushChangeProjectInstances(projectArray,projectsObject,listenerObject);
-        console.log(listenerObject.projectDivs);
-        loadProjectsModule(listenerObject,projectArray,projectsObject).addChangeProjectListeners(listenerObject);
-        loadProjectsModule(listenerObject,projectArray,projectsObject).loadAddNewProjectListItem();
-        loadProjectsModule(listenerObject,projectArray,projectsObject).addNewProjectEventListener(listenerObject);
-        
+        loadProjectsModule(projectArray,projectsObject).loadProject(projectArray);
+        // loadProjectsModule(projectArray,projectsObject).addChangeProjectListeners();
+        // loadProjectsModule(projectArray,projectsObject).loadAddNewProjectListItem();
+        // loadProjectsModule(projectArray,projectsObject).addNewProjectEventListener();
     }
 
     const loadTodoItems = () => {
-        makeTodoDiv(projectArray,listenerObject,projectsObject).loadTodoItemOuter();
-        makeTodoDiv(projectArray,listenerObject,projectsObject).pushDeleteInstances(projectsObject,listenerObject);
-        makeTodoDiv(projectArray,listenerObject,projectsObject).addDeleteIconListeners(listenerObject);
+        makeTodoDiv(projectArray,projectsObject).loadTodoItemOuter();
     }
 
-    console.log(projectArray);
-
-    
-    
-    document.addEventListener('click', () => {
-        console.log(projectsObject.currentProject.name);
-        console.log(projectArray)
-    });
-
-    
-    
-    
-    
-    
-    
     return {loadProjects, loadTodoItems, projectsObject, projectArray}    
 }
 

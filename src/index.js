@@ -62,7 +62,6 @@ editIconArray[0].addEventListener('click', () => {
 })
 
 const projectUL = document.querySelector('#project-list');
-projectUL.addEventListener('click', () => console.log(event.target));
 
 
 
