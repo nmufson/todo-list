@@ -2,7 +2,7 @@
 //edit project, change complete status 
 //delete todo
 //move todo from one project to another 
-import {deleteTodo} from './delete-todo';
+
 
 export class Project {
     constructor(name) {

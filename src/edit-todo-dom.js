@@ -1,4 +1,4 @@
-import { makeTodoDiv } from "./make-todo-div";
+
 import { loadTodoFuncContainer } from "./load-divs-dom";
 
 

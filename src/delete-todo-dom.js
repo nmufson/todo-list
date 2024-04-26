@@ -1,4 +1,3 @@
-import { makeTodoDiv } from "./make-todo-div";
 import { loadProjectsModule } from "./load-projects";
 import { listenerFlags } from "./load-projects";
 import { loadTodoFuncContainer } from "./load-divs-dom";

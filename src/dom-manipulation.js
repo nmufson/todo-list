@@ -1,5 +1,5 @@
 
-import { makeTodoDiv } from "./make-todo-div.js";
+
 import { loadProjectsModule } from "./load-projects.js";
 import { Project } from './project.js';
 import { Todo } from './create-todo.js';

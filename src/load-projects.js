@@ -1,7 +1,7 @@
 
 import { loadPage } from "./dom-manipulation.js";
 import { loadTodoFuncContainer } from "./load-divs-dom.js";
-import { makeTodoDiv } from "./make-todo-div.js";
+
 import { Project } from "./project.js";
 
 

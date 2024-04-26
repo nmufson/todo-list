@@ -38,7 +38,9 @@ export const addNewTodoFuncContainer = (projectArray,projectsObject) => {
         const descriptionInput = document.createElement('input');
         const dueDateInput = document.createElement('input');
         const priorityInput = document.createElement('select');
-        const buttonDiv = document.createElement('div');
+        const leftDiv = document.createElement('div');
+        const middleDiv = document.createElement('div');
+        const rightDiv = document.createElement('div');
         const addButton = document.createElement('button');
         const cancelButton = document.createElement('button');
 
@@ -50,15 +52,25 @@ export const addNewTodoFuncContainer = (projectArray,projectsObject) => {
         descriptionInput.setAttribute('placeholder','Description');
         dueDateInput.setAttribute('type','date');
 
-        todoListDivContainer.appendChild(addNewTodoDiv);
-        addNewTodoDiv.appendChild(nameInput);
-        addNewTodoDiv.appendChild(descriptionInput);
-        addNewTodoDiv.appendChild(dueDateInput);
-        addNewTodoDiv.appendChild(priorityInput);
-        addNewTodoDiv.appendChild(buttonDiv);
-        buttonDiv.appendChild(addButton);
-        buttonDiv.appendChild(cancelButton);
         
+        leftDiv.classList.add('left-div-add');
+        middleDiv.classList.add('middle-div-add');
+        rightDiv.classList.add('right-div-add');
+        
+
+        todoListDivContainer.appendChild(addNewTodoDiv);
+
+        addNewTodoDiv.appendChild(leftDiv);
+        addNewTodoDiv.appendChild(middleDiv);
+        addNewTodoDiv.appendChild(rightDiv);
+       
+        leftDiv.appendChild(nameInput);
+        leftDiv.appendChild(descriptionInput);
+        middleDiv.appendChild(dueDateInput);
+        middleDiv.appendChild(priorityInput);
+        rightDiv.appendChild(addButton);
+        rightDiv.appendChild(cancelButton);
+    
         addButton.textContent = 'Add';
         cancelButton.textContent = 'Cancel';
 

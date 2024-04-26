@@ -8,6 +8,10 @@ p {
     margin: 0;
 }
 
+input, select {
+    background-color: #F7EEDD;
+}
+
 #project-bar {
     background-color: #66b2b2;
     display: flex;
@@ -81,7 +85,15 @@ p {
     grid-template-columns: 1fr 4fr 1fr;
     min-height: 70px;
     border-top: solid black 2px;
+    
     background-color: #f99192;
+}
+
+.todo-item:hover, .add-new-todo-div-small:hover {
+    background-color: #f66162;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    border: solid black 3px;
 }
 
 .add-new-todo-div-small {
@@ -97,6 +109,36 @@ p {
     min-height: 70px;
     border-top: solid black 2px;
     background-color: #f99192;
+    padding-left: 2%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items: center;
+}
+
+.add-new-todo-input:hover {
+    background-color: #f66162;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    border: solid black 3px;
+}
+
+.left-div-add :first-child {
+    width: 50%;
+}
+
+.left-div-add :nth-child(2) {
+    width: 85%;
+}
+
+.right-div-add {
+    display: grid;
+    justify-items: center;
+}
+
+.right-div-add > button {
+    width: 60px;
+    border-radius: 10px;
+
 }
 
 
@@ -183,6 +225,15 @@ p {
 .add-new-todo-div-small > img {
     height: 35px;
     width: 35px;
+}
+
+.bottom-div {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+}
+
+.bottom-left-div > input {
+    width: 90%;
 }
 
 .confirm-div {
