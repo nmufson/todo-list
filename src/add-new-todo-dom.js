@@ -3,7 +3,7 @@ import { listenerFlags } from "./load-projects";
 import { editFuncContainer } from "./edit-todo-dom";
 import { Todo } from "./create-todo";
 
-export const addNewTodoFuncContainer = (projectArray,projectsObject) => {
+export const addNewTodoFuncContainer = (projectArray,projectsObject,mainTodoArray) => {
     const loadAddNewTodoDiv = () => {
         
         const todoListDivContainer = document.querySelector('#todo-list-container');
@@ -27,7 +27,7 @@ export const addNewTodoFuncContainer = (projectArray,projectsObject) => {
     }
 
     const loadNewTodoInputSmall = () => {
-        loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
         const todoListDivContainer = document.querySelector('#todo-list-container');
         const addNewTodoDivSmall = document.querySelector('.add-new-todo-div-small');
         addNewTodoDivSmall.remove();
@@ -97,7 +97,8 @@ export const addNewTodoFuncContainer = (projectArray,projectsObject) => {
         const newTodo = new Todo(name,description,date,priority,currentProject.name);
         currentProject.addTodo(newTodo);
 
-        loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage()
     }
 
     return {loadAddNewTodoDiv, loadNewTodoInputSmall, confirmNewTodoInput}

@@ -2,7 +2,7 @@ import { loadProjectsModule } from "./load-projects";
 import { listenerFlags } from "./load-projects";
 import { loadTodoFuncContainer } from "./load-divs-dom";
 
-export const deleteTodoFuncContainer = (projectArray,projectsObject) => {
+export const deleteTodoFuncContainer = (projectArray,projectsObject,mainTodoArray) => {
     const confirmDeletePopUp = (event) => {
         if (!listenerFlags.deleteIconShouldRun) return;
         loadProjectsModule().turnFlagsFalse();
@@ -45,7 +45,7 @@ export const deleteTodoFuncContainer = (projectArray,projectsObject) => {
     
         confirmDiv.remove();
         
-        loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
         loadProjectsModule().turnFlagsTrue();
     }
 

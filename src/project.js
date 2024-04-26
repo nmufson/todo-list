@@ -28,3 +28,8 @@ export class Project {
     }
 }
 
+const deleteTodo = (proj,todo) => {
+    const index = proj.todoArray.indexOf(todo);
+    proj.todoArray.splice(index,1);
+}
+

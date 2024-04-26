@@ -4,7 +4,7 @@ import { loadTodoFuncContainer } from "./load-divs-dom";
 
 export const editFuncContainer = (projectArray,projectsObject) => {
     const clickEditIcon = (editIcon,editIconNodeList) => {
-        loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
         const editIconArray = Array.from(editIconNodeList);
         const index = editIconArray.indexOf(editIcon);
         const currentProject = projectsObject.currentProject;
@@ -58,7 +58,7 @@ export const editFuncContainer = (projectArray,projectsObject) => {
         parentpriorityPara.replaceChild(priorityInput,priorityPara);
     
         saveButton.addEventListener('click', () => saveEditTodo(currentTodo,nameInput,descriptionInput,dueDateInput,priorityInput))
-        cancelButton.addEventListener('click', loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter)
+        cancelButton.addEventListener('click', loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter)
     };
 
     const saveEditTodo = (currentTodo,nameInput,descriptionInput,dueDateInput,priorityInput) => {
@@ -69,7 +69,7 @@ export const editFuncContainer = (projectArray,projectsObject) => {
             priority: priorityInput.value,
         }
         currentTodo.editTodo(object);
-        loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
     };
 
     const generatePriorityInput = (priorityInput) => {

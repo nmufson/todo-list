@@ -14,7 +14,7 @@ export let listenerFlags = {
     editTodoIconShouldRun: true,
 }
 
-export const loadProjectsModule = (projectArray,projectsObject) => {
+export const loadProjectsModule = (projectArray,projectsObject,mainTodoArray) => {
     
     
 
@@ -49,6 +49,7 @@ export const loadProjectsModule = (projectArray,projectsObject) => {
         addChangeProjectListeners();
         loadAddNewProjectListItem();
         addNewProjectEventListener();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage();
     }
 
     const loadAddNewProjectListItem = () => {
@@ -163,16 +164,15 @@ export const loadProjectsModule = (projectArray,projectsObject) => {
         const projectDivNodeList = document.querySelectorAll('.project-item');
         const projectDivArray = Array.from(projectDivNodeList);
         const clickedElement = event.target;
-        console.log(clickedElement);
         const index = projectDivArray.indexOf(clickedElement);
-        console.log(index);
+        
         
         projectsObject.currentProject = projectArray[index];
         clickedElement.setAttribute('id','selected-project-div');
         
         
 
-        loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
         
     };
 
