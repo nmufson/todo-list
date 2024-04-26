@@ -4,8 +4,12 @@ body {
     height: 100vh;
 }
 
+p {
+    margin: 0;
+}
+
 #project-bar {
-    background-color: yellow;
+    background-color: #66b2b2;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -13,13 +17,22 @@ body {
     grid-row: 1;
 }
 
+#project-bar > div {
+    display: flex;
+    justify-content: center;
+}
+
+
+
 #selected-project-div {
     border: 1px solid red;
+    background-color: rgba(249,113,113, 0.5);
 }
 
 #project-list {
     list-style-type: none;
     font-size: 1.5em;
+    padding: 0;
 }
 
 #add-project-li {
@@ -52,20 +65,44 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #fff0db;
 }
 
 #todo-list-container {
     
     width: 450px;
-    border: 2px solid black;
-    background-color: lightsalmon;
+    border-bottom: solid black 2px;
+    border-left: solid black 2px;
+    border-right: solid black 2px;
 }
 
 .todo-item {
     display: grid;
     grid-template-columns: 1fr 4fr 1fr;
-    border-bottom: black solid 1px;
+    min-height: 70px;
+    border-top: solid black 2px;
+    background-color: #f99192;
 }
+
+.add-new-todo-div-small {
+    display: flex;
+    align-items: center;
+    padding-left: 10%;
+    min-height: 80px;
+    border-top: 2px solid black;
+    background-color: #f99192;
+}
+
+.add-new-todo-input {
+    min-height: 70px;
+    border-top: solid black 2px;
+    background-color: #f99192;
+}
+
+
+/* .todo-item:hover {
+
+} */
 
 .check-box-div {
     position: relative;
@@ -77,8 +114,8 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 75%;
-    height: 75%;
+    width: 60px;
+    height: 60px;
 }
 
 .xMark-icon {
@@ -87,14 +124,25 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 70%;
-    height: 77%;
+    width: 60px;
+    height: 60px;
 }
 
 .top-div {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
+    padding-top: 3%;
 }
+
+.name-h3 {
+    margin: 0;
+    font-size: 1.3em;
+}
+
+.bottom-left-div {
+    padding-bottom: 2%;
+}
+
 
 .bottom-div-edit {
     display: grid;
@@ -123,11 +171,15 @@ body {
     
 }
 
-.add-new-todo-div-small {
-    display: flex;
-    align-items: center;
-    padding-left: 10%;
+.description-para {
+    margin-top: 2%;
 }
+
+
+
+
+
+
 .add-new-todo-div-small > img {
     height: 35px;
     width: 35px;

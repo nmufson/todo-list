@@ -3,6 +3,7 @@ import { makeTodoDiv } from "./make-todo-div.js";
 import { loadProjectsModule } from "./load-projects.js";
 import { Project } from './project.js';
 import { Todo } from './create-todo.js';
+import { loadTodoFuncContainer } from "./load-divs-dom.js";
 
 
 
@@ -28,8 +29,8 @@ export const loadPage = () => {
     }
 
     const sampleTodo = new Todo('Clean','sweep the floor','2024-04-28','High',projectsObject.currentProject);
-    const todo1 = new Todo('Cook','make spaghetti','2024-04-28','High','general');
-    const todo2 = new Todo('Exercise','lift weights at Crunch','2024-04-28','High','general');
+    const todo1 = new Todo('Cook','make spaghetti','2024-04-28','Medium','general');
+    const todo2 = new Todo('Exercise','lift weights at Crunch, probably going to do chest and tris. Should involve bench and dips.','2024-04-28','High','general');
     const todo3 = new Todo('Spanish','practice spanish on youtube','2024-04-28','High','general');
     const todo4 = new Todo('Da Livy un besito','Livy es muy bonita','2024-04-28','High','OtherProject');
     
@@ -41,17 +42,12 @@ export const loadPage = () => {
     generalProject.addTodo(todo3);
     otherProject.addTodo(todo4);
     
-    
-    
     const loadProjects = () => {
         loadProjectsModule(projectArray,projectsObject).loadProject(projectArray);
-        // loadProjectsModule(projectArray,projectsObject).addChangeProjectListeners();
-        // loadProjectsModule(projectArray,projectsObject).loadAddNewProjectListItem();
-        // loadProjectsModule(projectArray,projectsObject).addNewProjectEventListener();
     }
 
     const loadTodoItems = () => {
-        makeTodoDiv(projectArray,projectsObject).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter();
     }
 
     return {loadProjects, loadTodoItems, projectsObject, projectArray}    
@@ -66,13 +62,7 @@ export const loadPage = () => {
 
 
 
-const removeAllEventListeners = (nodeList) => {
-    nodeList.forEach((node) => {
-        const clone = node.cloneNode(true);
-        node.parentNode.replaceChild(clone, node);
-    })
-    
-} 
+
 
 
 

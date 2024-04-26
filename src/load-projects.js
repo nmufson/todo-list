@@ -1,5 +1,6 @@
 
 import { loadPage } from "./dom-manipulation.js";
+import { loadTodoFuncContainer } from "./load-divs-dom.js";
 import { makeTodoDiv } from "./make-todo-div.js";
 import { Project } from "./project.js";
 
@@ -23,10 +24,11 @@ export const loadProjectsModule = (projectArray,projectsObject) => {
         
             
         document.body.appendChild(projectBar);
-        
+        const projectListDiv = document.createElement('div');
         const projectList = document.createElement('ul');
         projectList.setAttribute('id','project-list');
-        projectBar.appendChild(projectList);
+        projectBar.appendChild(projectListDiv);
+        projectListDiv.appendChild(projectList);
     
         projectArray.forEach((project) => {
             const projectListItem = document.createElement('li');
@@ -170,7 +172,7 @@ export const loadProjectsModule = (projectArray,projectsObject) => {
         
         
 
-        makeTodoDiv(projectArray,projectsObject).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject).loadTodoItemOuter();
         
     };
 
