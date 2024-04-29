@@ -1,6 +1,7 @@
 
 import { loadTodoFuncContainer } from "./load-divs-dom";
 import { listenerFlags } from "./load-projects";
+import { loadProjectsModule } from "./load-projects";
 
 
 export const editFuncContainer = (projectArray,projectsObject,mainTodoArray) => {
@@ -59,10 +60,15 @@ export const editFuncContainer = (projectArray,projectsObject,mainTodoArray) => 
         parentdueDatePara.replaceChild(dueDateInput, dueDatePara);
         parentpriorityPara.replaceChild(priorityInput,priorityPara);
     
-        saveButton.addEventListener('click', () => saveEditTodo(currentTodo,nameInput,descriptionInput,dueDateInput,priorityInput))
-        cancelButton.addEventListener('click', loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter)
-    };
-
+        saveButton.addEventListener('click', () => {
+            saveEditTodo(currentTodo,nameInput,descriptionInput,dueDateInput,priorityInput)
+            loadProjectsModule().turnFlagsTrue();
+        })
+        cancelButton.addEventListener('click', () => {
+            loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
+            loadProjectsModule().turnFlagsTrue();
+        });
+    }
     const saveEditTodo = (currentTodo,nameInput,descriptionInput,dueDateInput,priorityInput) => {
         const object = {
             name: nameInput.value,
@@ -72,7 +78,9 @@ export const editFuncContainer = (projectArray,projectsObject,mainTodoArray) => 
         }
         currentTodo.editTodo(object);
         loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
-        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage()
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage();
+        
+        
     };
 
     const generatePriorityInput = (priorityInput) => {

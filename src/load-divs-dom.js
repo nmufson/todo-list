@@ -95,22 +95,26 @@ export const loadTodoFuncContainer = (projectArray,projectsObject,mainTodoArray)
     }
 
     const expandTodo = (event,todoDiv) => {
-        if (!listenerFlags.expandTodoShouldRun) return;
-        loadProjectsModule().turnFlagsFalse();
-
         const element = event.target;
-        const expandDivCheck = document.querySelector('.expand-todo');
-        console.log(element.className);
+        
         if (element.className === 'check-box-icon') return;
         if (element.className === 'xMark-icon') return;
         if (element.className === 'edit-icon') return;
         if (element.className === 'delete-icon') return;
+        if (element.textContent === 'Save') return;
+        if (element.textContent === 'Cancel') return;
+        
+        if (!listenerFlags.expandTodoShouldRun) return;
+        loadProjectsModule().turnFlagsFalse();
 
+        
+        const expandDivCheck = document.querySelector('.expand-todo');
+        console.log(element.className);
+        
         if (expandDivCheck) {
             expandDivCheck.remove();
         }
 
-        
         const contentArea = document.querySelector('#content-area');
         const todoNodeList = document.querySelectorAll('.todo-item');
         const todoArray = Array.from(todoNodeList);

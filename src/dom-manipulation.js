@@ -4,6 +4,7 @@ import { loadProjectsModule } from "./load-projects.js";
 import { Project } from './project.js';
 import { Todo } from './create-todo.js';
 import { loadTodoFuncContainer } from "./load-divs-dom.js";
+import { listenerFlags } from "./load-projects.js";
 
 
 
@@ -66,6 +67,7 @@ export const loadPage = () => {
         console.log(projectArray);
     };
 
+    document.addEventListener('click', () => console.log(listenerFlags))
 
     const mainTodoArray = [];
 
