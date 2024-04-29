@@ -2,7 +2,7 @@ import { parseISO, format } from 'date-fns';
 import { addNewTodoFuncContainer } from './add-new-todo-dom';
 import { deleteTodoFuncContainer } from './delete-todo-dom';
 import { editFuncContainer } from './edit-todo-dom';
-import { listenerFlags } from './load-projects';
+import { listenerFlags, loadProjectsModule } from './load-projects';
 import { Project } from './project';
 import { Todo } from './create-todo';
 
@@ -90,6 +90,171 @@ export const loadTodoFuncContainer = (projectArray,projectsObject,mainTodoArray)
         checkBoxIcon.setAttribute('src', '../src/icons/square.svg');
         editIcon.setAttribute('src', '../src/icons/pencil.svg');
         deleteIcon.setAttribute('src','../src/icons/delete.svg');
+
+        todoDiv.addEventListener('click', (event) => expandTodo(event,todoDiv))
+    }
+
+    const expandTodo = (event,todoDiv) => {
+        if (!listenerFlags.expandTodoShouldRun) return;
+        loadProjectsModule().turnFlagsFalse();
+
+        const element = event.target;
+        const expandDivCheck = document.querySelector('.expand-todo');
+        console.log(element.className);
+        if (element.className === 'check-box-icon') return;
+        if (element.className === 'xMark-icon') return;
+        if (element.className === 'edit-icon') return;
+        if (element.className === 'delete-icon') return;
+
+        if (expandDivCheck) {
+            expandDivCheck.remove();
+        }
+
+        
+        const contentArea = document.querySelector('#content-area');
+        const todoNodeList = document.querySelectorAll('.todo-item');
+        const todoArray = Array.from(todoNodeList);
+        const indexTodo = todoArray.indexOf(todoDiv);
+
+        const projectDivNodeList = document.querySelectorAll('.project-item');
+        const projectDivArray = Array.from(projectDivNodeList);
+        const currentProjectDiv = document.querySelector('#selected-project-div');
+        const indexProject = projectDivArray.indexOf(currentProjectDiv);
+        const currentProject = projectArray[indexProject];
+
+        const todo = currentProject.todoArray[indexTodo];
+        
+        const div = document.createElement('div');
+        const topDiv = document.createElement('div');
+        const leftDiv = document.createElement('div');
+        const rightDiv = document.createElement('div');
+        const dueDateDiv = document.createElement('div');
+        const priorityDiv = document.createElement('div');
+
+        const deleteIcon = document.createElement('img');
+        const closeIcon = document.createElement('img');
+
+        const namePara = document.createElement('p');
+        const descriptionPara = document.createElement('p');
+
+        const dueDatePara =  document.createElement('p');
+        const dueDate = document.createElement('input');
+
+        dueDate.setAttribute('type','date');
+
+        const priorityPara = document.createElement('p');
+        const priorityInput = document.createElement('select');
+
+        editFuncContainer(projectArray,projectsObject,mainTodoArray).generatePriorityInput(priorityInput);
+
+        contentArea.appendChild(div);
+        div.appendChild(topDiv);
+        div.appendChild(leftDiv);
+        div.appendChild(rightDiv);
+
+        topDiv.appendChild(deleteIcon);
+        topDiv.appendChild(closeIcon);
+
+        leftDiv.appendChild(namePara);
+        leftDiv.appendChild(descriptionPara);
+
+        rightDiv.appendChild(dueDateDiv);
+        rightDiv.appendChild(priorityDiv);
+
+        dueDateDiv.appendChild(dueDatePara);
+        dueDateDiv.appendChild(dueDate);
+
+        priorityDiv.appendChild(priorityPara);
+        priorityDiv.appendChild(priorityInput);
+        
+
+        namePara.textContent = todo.name;
+        descriptionPara.textContent = todo.description;
+        dueDatePara.textContent = 'Due date'
+        dueDate.value = todo.dueDate;
+        priorityInput.value = todo.priority;
+        priorityPara.textContent = 'Priority';
+
+        topDiv.classList.add('top-div-expand');
+        leftDiv.classList.add('left-div-expand');
+        rightDiv.classList.add('right-div-expand');
+        div.classList.add('expand-todo');
+        deleteIcon.setAttribute('src','../src/icons/delete.svg');
+        closeIcon.setAttribute('src','../src/icons/x-mark.svg');
+
+        const buttonDiv = document.createElement('div');
+        const saveButton = document.createElement('button');
+        const cancelButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        cancelButton.textContent = 'Cancel';
+
+        closeIcon.addEventListener('click', () => {
+            div.remove();
+            loadProjectsModule().turnFlagsTrue();
+            loadTodoItemOuter();
+        })
+
+        deleteIcon.addEventListener('click', () => {
+            listenerFlags.deleteIconShouldRun = true;
+            deleteTodoFuncContainer(projectArray,projectsObject,mainTodoArray).confirmDeletePopUp(event);
+        })
+
+        dueDate.addEventListener('change', () => {
+            todo.dueDate = dueDate.value;
+        })
+
+        priorityInput.addEventListener('change', () => {
+            todo.priority = priorityInput.value;
+        })
+
+        
+
+
+        const editNameDescription = () => {
+            const nameInput = document.createElement('input');
+            const descriptionInput = document.createElement('input');
+
+            leftDiv.classList.add('edit');
+
+            nameInput.setAttribute('type','text');
+            descriptionInput.setAttribute('type','text');
+
+            namePara.replaceWith(nameInput);
+            descriptionPara.replaceWith(descriptionInput);
+
+            leftDiv.appendChild(buttonDiv);
+            buttonDiv.appendChild(saveButton);
+            buttonDiv.appendChild(cancelButton);
+
+            nameInput.value = todo.name;
+            descriptionInput.value = todo.description;
+
+            saveButton.addEventListener('click', () => {
+                todo.name = nameInput.value;
+                todo.description = descriptionInput.value;
+
+                namePara.textContent = todo.name;
+                descriptionPara.textContent = todo.description;
+
+                nameInput.replaceWith(namePara);
+                descriptionInput.replaceWith(descriptionPara);
+
+                saveButton.remove();
+                cancelButton.remove();
+            })
+
+            cancelButton.addEventListener('click', () => {
+                saveButton.remove();
+                cancelButton.remove();
+                
+                nameInput.replaceWith(namePara);
+                descriptionInput.replaceWith(descriptionPara);
+            })
+        }
+
+        namePara.addEventListener('click', editNameDescription);
+        descriptionPara.addEventListener('click', editNameDescription);
+
     }
 
     const loadTodoItemOuter = () => {
@@ -101,6 +266,8 @@ export const loadTodoFuncContainer = (projectArray,projectsObject,mainTodoArray)
         const currentProjectDiv = document.querySelector('#selected-project-div');
         const index = projectDivArray.indexOf(currentProjectDiv);
         const currentProject = projectArray[index];
+
+
     
         const TodoList = currentProject.todoArray;
         TodoList.forEach((todo) => makeDiv(todo))
@@ -109,29 +276,30 @@ export const loadTodoFuncContainer = (projectArray,projectsObject,mainTodoArray)
         addCheckBoxListeners();
         addEditIconListeners();
         loadXMarks();
-        
-        
-        
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage();
     }
 
     const addDeleteIconListeners = () => {
         const deleteIconNodeList = document.querySelectorAll('.delete-icon');
         deleteIconNodeList.forEach((icon) => {
-            icon.addEventListener('click', deleteTodoFuncContainer(projectArray,projectsObject).confirmDeletePopUp)
+            icon.addEventListener('click', deleteTodoFuncContainer(projectArray,projectsObject,mainTodoArray).confirmDeletePopUp)
         })
     }
 
     const addCheckBoxListeners = () => {
         const checkBoxIconNodeList = document.querySelectorAll('.check-box-icon');
         checkBoxIconNodeList.forEach((checkBoxIcon) => {
-            checkBoxIcon.addEventListener('click', () => alterCheckBox(checkBoxIcon,checkBoxIconNodeList));
+            checkBoxIcon.addEventListener('click', () => {
+                alterCheckBox(checkBoxIcon,checkBoxIconNodeList);
+                loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage();
+            });
         })
     }
 
     const addEditIconListeners = () => {
         const editIconNodeList = document.querySelectorAll('.edit-icon');
         editIconNodeList.forEach((editIcon) => {
-            editIcon.addEventListener('click', () => editFuncContainer(projectArray,projectsObject).clickEditIcon(editIcon,editIconNodeList))
+            editIcon.addEventListener('click', () => editFuncContainer(projectArray,projectsObject,mainTodoArray).clickEditIcon(editIcon,editIconNodeList))
         })
     }
 
@@ -157,10 +325,13 @@ export const loadTodoFuncContainer = (projectArray,projectsObject,mainTodoArray)
             const xMark = div.querySelector('.xMark-icon');
             const checkBoxIcon = div.querySelector('.check-box-icon');
             if (xMark) {
-                
-                xMark.addEventListener('click',() => alterCheckBox(checkBoxIcon,checkBoxIconNodeList))
+                xMark.addEventListener('click',() => {
+                    alterCheckBox(checkBoxIcon,checkBoxIconNodeList);
+                    loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage();
+                })
             }
         })
+        
     }
 
     const alterCheckBox = (checkBoxIcon,checkBoxIconNodeList) => {
@@ -177,6 +348,8 @@ export const loadTodoFuncContainer = (projectArray,projectsObject,mainTodoArray)
         loadXMarks();
     }
 
+    
+
     const groupAllTodos = () => {
         const length = mainTodoArray.length;
         mainTodoArray.splice(0,length);
@@ -184,19 +357,13 @@ export const loadTodoFuncContainer = (projectArray,projectsObject,mainTodoArray)
             const array = project.todoArray;
             array.forEach((todo) => {
                 mainTodoArray.push(todo);
-                
             })
-            
         })
     }
     
     const populateStorage = () => {
         groupAllTodos();
-
-        const serializedProjects = JSON.stringify(projectArray.map((project) => ({
-            projectName: project.name,
-        })));
-        
+    
         const sertializedTodos = JSON.stringify(mainTodoArray.map((todo) => ({
             todoName: todo.name,
             todoDescription: todo.description,
@@ -206,45 +373,63 @@ export const loadTodoFuncContainer = (projectArray,projectsObject,mainTodoArray)
             todoComplete: todo.complete
         })));
 
-        // localStorage.setItem('projects',serializedProjects);
-        // localStorage.setItem('todos',sertializedTodos);
+        localStorage.setItem('todos',sertializedTodos);
+
+        const retrievedTodos = localStorage.getItem('todos');
+        console.log(retrievedTodos);
     }
 
-    const retrieveStorage = () => {
-        if (!localStorage.getItem('projects')) return;
-        if (!localStorage.getItem('todos')) return;
+    const populateProjects = () => {
+        groupAllTodos();
 
-        const retrievedProjects = localStorage.getItem('projects');
-        const retrievedTodos = localStorage.getItem('todos');
+        const serializedProjects = JSON.stringify(projectArray.map((project) => ({
+            projectName: project.name,
+        })));
 
-        //converts JSON strings into javascript objects 
-        const projectsData = JSON.parse(retrievedProjects);
-        const todosData = JSON.parse(retrievedTodos);
+        localStorage.setItem('projects',serializedProjects);
+        console.log(projectArray);
+    }
 
-        projectsData.forEach((project) => {
-            if (project.name) {
-            const projectInstance = new Project(project.name)
-            projectArray.push(projectInstance);
-            }
-            
-        });
+    // const retrieveStorage = () => {
+    //     if (!localStorage.getItem('projects')) return;
+    //     if (!localStorage.getItem('todos')) return;
 
-        todosData.forEach((todo) => {
-            if (todo.name) {
-                const todoInstance = new Todo(todo.name, 
-                    todo.description, 
-                    todo.dueDate,
-                    todo.priority,
-                    todo.project,
-                    todo.complete
-                );
-                //find which object in an array has a certain property
-                const projectName = todoInstance.project;
-                const projectInstance = projectArray.find((e) => e.name === projectName);
-                projectInstance.todoArray.push(todoInstance);
-            }
-        });
-    };
+    //     const retrievedProjects = localStorage.getItem('projects');
+    //     const retrievedTodos = localStorage.getItem('todos');
 
-    return { makeDiv, loadTodoItemOuter, populateStorage,retrieveStorage};
+    //     //converts JSON strings into javascript objects 
+    //     const projectsData = JSON.parse(retrievedProjects);
+    //     const todosData = JSON.parse(retrievedTodos);
+
+    //     projectsData.splice(0,1);
+
+    //     projectArray = [];
+        
+    //     projectsData.forEach((project) => {
+    //         if (project.projectName) {
+    //         const projectInstance = new Project(project.projectName)
+    //         projectArray.push(projectInstance);
+    //         }
+    //     });
+
+
+    //     todosData.forEach((todo) => {
+    //         if (todo.todoName) {
+    //             console.log(todo.todoComplete);
+    //             const todoInstance = new Todo(todo.todoName, 
+    //                 todo.todoDescription, 
+    //                 todo.todoDueDate,
+    //                 todo.todoPriority,
+    //                 todo.todoProject,
+    //                 todo.todoComplete
+    //             );
+    //             //find which object in an array has a certain property
+    //             const projectName = todoInstance.project;
+    //             const projectInstance = projectArray.find((e) => e.name === projectName);
+    //             projectInstance.todoArray.push(todoInstance);
+    //         } 
+    //     });
+    // };
+
+    return { makeDiv, loadTodoItemOuter, populateStorage,populateProjects};
 }

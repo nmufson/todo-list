@@ -98,7 +98,7 @@ export const addNewTodoFuncContainer = (projectArray,projectsObject,mainTodoArra
         currentProject.addTodo(newTodo);
 
         loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
-        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage()
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage();
     }
 
     return {loadAddNewTodoDiv, loadNewTodoInputSmall, confirmNewTodoInput}

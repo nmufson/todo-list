@@ -12,17 +12,15 @@ export let listenerFlags = {
     newTodoInputShouldRun: true,
     checkBoxShouldRun: true,
     editTodoIconShouldRun: true,
+    deleteProjectShouldRun: true,
+    expandTodoShouldRun: true
 }
 
 export const loadProjectsModule = (projectArray,projectsObject,mainTodoArray) => {
-    
-    
-
     const loadProject = (projectArray) => {
         const projectBar = document.querySelector('#project-bar');
         projectBar.innerHTML = '';
         
-            
         document.body.appendChild(projectBar);
         const projectListDiv = document.createElement('div');
         const projectList = document.createElement('ul');
@@ -33,6 +31,28 @@ export const loadProjectsModule = (projectArray,projectsObject,mainTodoArray) =>
         projectArray.forEach((project) => {
             const projectListItem = document.createElement('li');
             const projectItemDiv = document.createElement('div');
+            const deleteButton = document.createElement('img');
+
+            deleteButton.classList.add('delete-project-button');
+            deleteButton.setAttribute('src','../src/icons/delete.svg');
+
+            deleteButton.addEventListener('click', deleteProjectPopup)
+
+            projectListItem.addEventListener('mouseover', () => {
+                if (projectArray.length === 1) return;
+                if (!listenerFlags.deleteProjectShouldRun) return;
+                projectListItem.appendChild(deleteButton);
+                
+                
+            })
+
+            projectListItem.addEventListener('mouseleave', () => {
+                if (document.querySelector('.delete-project-button')) {
+                    projectListItem.removeChild(deleteButton);
+                }
+                
+            })
+            
     
             projectItemDiv.id = `project-div-${projectArray.indexOf(project)}`;
             projectItemDiv.classList.add('project-item');
@@ -44,12 +64,13 @@ export const loadProjectsModule = (projectArray,projectsObject,mainTodoArray) =>
         const projectDivNodeList = document.querySelectorAll('.project-item');
         const currentProject = projectsObject.currentProject;
         const index = projectArray.indexOf(currentProject); 
+        
         projectDivNodeList[index].setAttribute('id','selected-project-div');
 
         addChangeProjectListeners();
         loadAddNewProjectListItem();
         addNewProjectEventListener();
-        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateProjects();
     }
 
     const loadAddNewProjectListItem = () => {
@@ -170,11 +191,57 @@ export const loadProjectsModule = (projectArray,projectsObject,mainTodoArray) =>
         projectsObject.currentProject = projectArray[index];
         clickedElement.setAttribute('id','selected-project-div');
         
-        
-
         loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
-        
     };
+
+    const deleteProjectPopup = (event) => {
+        turnFlagsFalse();
+        const deleteProjectButton = document.querySelector('.delete-project-button');
+        
+        const contentArea = document.querySelector('#content-area');
+        const div = document.createElement('div');
+        const para = document.createElement('p');
+        const buttonDiv = document.createElement('div');
+        const confirmDeleteButton = document.createElement('button');
+        const cancelButton = document.createElement('button');
+        const img = event.target;
+        const projectDiv = img.previousElementSibling;
+        const listItem = projectDiv.parentElement;
+
+        deleteProjectButton.remove();
+        
+        const projectName = projectDiv.textContent;
+        const project = projectArray.find((e) => e.name === projectName);
+        const projectIndex = projectArray.indexOf(project);
+
+        div.classList.add('confirm-div');
+
+        contentArea.appendChild(div);
+        div.appendChild(para);
+        div.appendChild(buttonDiv);
+
+        buttonDiv.appendChild(confirmDeleteButton);
+        buttonDiv.appendChild(cancelButton);
+
+        para.textContent = `Delete ${projectName}?`;
+        confirmDeleteButton.textContent = 'Delete';
+        cancelButton.textContent = 'Cancel';
+
+        confirmDeleteButton.addEventListener('click', () => {
+            div.remove();
+            turnFlagsTrue();
+            projectArray.splice(projectIndex,1);
+            listItem.remove();
+            loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateProjects();
+        })
+
+        cancelButton.addEventListener('click', () => {
+            div.remove();
+            turnFlagsTrue();
+        })
+
+    }
+    
 
     return { loadProject, addChangeProjectListeners, loadAddNewProjectListItem, addNewProjectEventListener, turnFlagsFalse, turnFlagsTrue }
 }

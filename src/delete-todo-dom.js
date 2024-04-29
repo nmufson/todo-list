@@ -12,6 +12,13 @@ export const deleteTodoFuncContainer = (projectArray,projectsObject,mainTodoArra
         const element = event.target;
         const index  = nodeArray.indexOf(element);
         
+        
+        createConfirmDeleteDiv(index);
+        
+        
+    }
+
+    const createConfirmDeleteDiv = (index) => {
         const contentArea = document.querySelector('#content-area');
         const confirmDiv = document.createElement('div');
         const confirmPara = document.createElement('p');
@@ -30,10 +37,9 @@ export const deleteTodoFuncContainer = (projectArray,projectsObject,mainTodoArra
         confirmPara.textContent = 'Delete To-do?';
         deleteButton.textContent = 'Delete';
         cancelButton.textContent = 'Cancel';
-    
+
         deleteButton.addEventListener('click', () => confirmDelete(index))
         cancelButton.addEventListener('click', cancelDelete);
-    
     }
 
     const confirmDelete = (index) => {
@@ -47,6 +53,8 @@ export const deleteTodoFuncContainer = (projectArray,projectsObject,mainTodoArra
         
         loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
         loadProjectsModule().turnFlagsTrue();
+        const expandDivCheck = document.querySelector('.expand-todo');
+        if (expandDivCheck) expandDivCheck.remove();
     }
 
     const cancelDelete = () => {
@@ -56,7 +64,7 @@ export const deleteTodoFuncContainer = (projectArray,projectsObject,mainTodoArra
     
     }
 
-    return {confirmDeletePopUp, confirmDelete, cancelDelete}
+    return {confirmDeletePopUp, confirmDelete, cancelDelete, createConfirmDeleteDiv}
 }
 
 

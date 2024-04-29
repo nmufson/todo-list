@@ -19,33 +19,62 @@ export const loadPage = () => {
     document.body.appendChild(projectBar);
     document.body.appendChild(contentArea);
     contentArea.appendChild(todoListDivContainer);
-    
-    const generalProject = new Project('general');
-    const otherProject = new Project('OtherProject');
-    
-    const projectArray = [generalProject, otherProject];
+
+    let projectArray;
+
+    const retrieveStorage = () => {
+        if (!localStorage.getItem('projects')) return;
+        if (!localStorage.getItem('todos')) return;
+
+        const retrievedProjects = localStorage.getItem('projects');
+        const retrievedTodos = localStorage.getItem('todos');
+
+        //converts JSON strings into javascript objects 
+        const projectsData = JSON.parse(retrievedProjects);
+        const todosData = JSON.parse(retrievedTodos);
+
+        projectArray = [];
+        
+        projectsData.forEach((project) => {
+            if (project.projectName) {
+            const projectInstance = new Project(project.projectName)
+            projectArray.push(projectInstance);
+            }
+        });
+
+        todosData.forEach((todo) => {
+            if (todo.todoName) {
+                console.log(todo.todoComplete);
+                const todoInstance = new Todo(todo.todoName, 
+                    todo.todoDescription, 
+                    todo.todoDueDate,
+                    todo.todoPriority,
+                    todo.todoProject,
+                    todo.todoComplete
+                );
+                //find which object in an array has a certain property
+                const projectName = todoInstance.project;
+                const projectInstance = projectArray.find((e) => e.name === projectName);
+                projectInstance.todoArray.push(todoInstance);
+            } 
+        });
+
+        if ((projectArray.length === 0) || (!projectArray.length)) {
+            const generalProject = new Project('general');
+            projectArray.push(generalProject);
+        }
+        console.log(projectArray);
+    };
+
+
+    const mainTodoArray = [];
+
+    retrieveStorage();
+
     const projectsObject = { 
         currentProject: projectArray[0]
     }
-    const mainTodoArray = [];
 
-    const sampleTodo = new Todo('Clean','sweep the floor','2024-04-28','High',projectsObject.currentProject);
-    const todo1 = new Todo('Cook','make spaghetti','2024-04-28','Medium','general');
-    const todo2 = new Todo('Exercise','lift weights at Crunch, probably going to do chest and tris. Should involve bench and dips.','2024-04-28','High','general');
-    const todo3 = new Todo('Spanish','practice spanish on youtube','2024-04-28','High','general');
-    const todo4 = new Todo('Da Livy un besito','Livy es muy bonita','2024-04-28','High','OtherProject');
-    
-    otherProject.addTodo(sampleTodo);
-    generalProject.addTodo(todo1);
-    generalProject.addTodo(todo2);
-    generalProject.addTodo(todo3);
-    otherProject.addTodo(todo4);
-    
-
-    loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).retrieveStorage();
-    document.addEventListener('click', () => console.log(projectArray));
-    document.addEventListener('click', () => console.log(mainTodoArray));
-    
     const loadProjects = () => {
         loadProjectsModule(projectArray,projectsObject,mainTodoArray).loadProject(projectArray);
 
@@ -54,17 +83,6 @@ export const loadPage = () => {
     const loadTodoItems = () => {
         loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
     }
-    //store the project and object required data as strings, then retrieve them
-    //and simply remake them
-    //instantiate projects, todos, add todos to project, then push projects to project array
-    
-    //serialize project names 
-    
-
-    
-
-    
-    
 
     return {loadProjects, loadTodoItems, projectsObject, projectArray }    
 }

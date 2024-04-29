@@ -1,9 +1,11 @@
 
 import { loadTodoFuncContainer } from "./load-divs-dom";
+import { listenerFlags } from "./load-projects";
 
 
-export const editFuncContainer = (projectArray,projectsObject) => {
+export const editFuncContainer = (projectArray,projectsObject,mainTodoArray) => {
     const clickEditIcon = (editIcon,editIconNodeList) => {
+        if (!listenerFlags.editTodoIconShouldRun) return;
         loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
         const editIconArray = Array.from(editIconNodeList);
         const index = editIconArray.indexOf(editIcon);
@@ -70,6 +72,7 @@ export const editFuncContainer = (projectArray,projectsObject) => {
         }
         currentTodo.editTodo(object);
         loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).loadTodoItemOuter();
+        loadTodoFuncContainer(projectArray,projectsObject,mainTodoArray).populateStorage()
     };
 
     const generatePriorityInput = (priorityInput) => {

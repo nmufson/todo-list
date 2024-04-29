@@ -1,11 +1,11 @@
 export class Todo {
-    constructor(name,description,dueDate,priority,project) {
+    constructor(name,description,dueDate,priority,project,complete = 'no') {
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.project = project;
-        this.complete = 'no';
+        this.complete = complete;
     }
 
     editTodo = (object) => {
